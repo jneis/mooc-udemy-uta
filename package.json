@@ -1,0 +1,22 @@
+{
+  "name": "angular-udemy-uta",
+  "version": "1.0.0",
+  "description": "code for coursera's 'unit testing angular.js' course",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jneis/angular-udemy-uta.git"
+  },
+  "author": "jneis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jneis/angular-udemy-uta/issues"
+  },
+  "homepage": "https://github.com/jneis/angular-udemy-uta#readme",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}
