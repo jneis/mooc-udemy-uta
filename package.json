@@ -21,11 +21,10 @@
     "karma": "^0.13.19",
     "karma-jasmine": "^0.3.7",
     "karma-phantomjs-launcher": "^1.0.0",
-    "phantom": "^0.8.4",
-    "phantomjs": "^2.1.3"
+    "phantomjs-prebuilt": "^2.1.3"
   },
   "scripts": {
-    "preinstall": "npm install -g bower karma-cli phantomjs",
+    "preinstall": "npm install -g bower karma-cli phantomjs-prebuilt",
     "postinstall": "cd app && bower install",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
