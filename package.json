@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "code for coursera's 'unit testing angular.js' course",
   "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jneis/angular-udemy-uta.git"
@@ -18,5 +15,18 @@
   "homepage": "https://github.com/jneis/angular-udemy-uta#readme",
   "dependencies": {
     "express": "^4.13.4"
+  },
+  "devDependencies": {
+    "jasmine": "^2.4.1",
+    "karma": "^0.13.19",
+    "karma-jasmine": "^0.3.7",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "phantom": "^0.8.4",
+    "phantomjs": "^2.1.3"
+  },
+  "scripts": {
+    "preinstall": "npm install -g bower karma-cli phantomjs",
+    "postinstall": "cd app && bower install",
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
