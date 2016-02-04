@@ -1,6 +1,6 @@
 var app = angular.module('utaApp', []);
 
-app.controller('ctrl', function($rootScope, $scope, $http) {
+app.controller('ctrl', function($rootScope, $scope, $http, $timeout) {
     $scope.title = 'Udemy\'s Unit Testing AngularJS';
     
     $scope.apiKey = '74bff1932a0961251a0e5eeac034ed7f';
@@ -34,9 +34,19 @@ app.controller('ctrl', function($rootScope, $scope, $http) {
                     destination.weather = {};
                     destination.weather.main = resp.data.weather[0].main;
                     destination.weather.temp = convert(resp.data.main.temp);
+                } else {
+                    $scope.message = 'City not found'
                 }
             }, function(err) {
-                console.err(err);
+                $scope.message = 'Server error'
             });
-    };    
+    };
+
+    $scope.messageWatcher = $scope.$watch('message', function() {
+        if ($scope.message) {
+            $timeout(function() {
+                $scope.message = null;
+            }, 3000);
+        }
+    });
 });

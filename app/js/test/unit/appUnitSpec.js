@@ -7,14 +7,15 @@ describe('app-test-suite', function() {
 
     // testing controller
     describe('controller-test', function() {
-        var scope, ctrl, httpBackend;
+        var scope, ctrl, httpBackend, timeout;
 
         beforeEach(
             // angular-mocks' 'inject' injects components to test
             //    in this case, injected component is a controller
-            inject(function($controller, $rootScope, $httpBackend) {
+            inject(function($controller, $rootScope, $httpBackend, $timeout) {
                 scope = $rootScope.$new();
                 httpBackend = $httpBackend;
+                timeout = $timeout;
                 // (controller name, scope link)
                 ctrl = $controller('ctrl', {$scope: scope});
             })
@@ -88,6 +89,17 @@ describe('app-test-suite', function() {
 
             expect(scope.destination.weather.main).toBe('Rain');
             expect(scope.destination.weather.temp).toBe(15);
+        });
+
+        it('should remove error message after timeout', function() {
+            scope.message = 'some error message';
+
+            expect(scope.message).toBe('some error message');
+
+            scope.$apply();
+            timeout.flush();
+
+            expect(scope.message).toBe(null);
         });
 
     });

@@ -18,6 +18,7 @@
 
     <section>
         <h2>Trips</h2>
+        <h4 ng-show="message">{{message}}</h4>
         <div ng-repeat="dest in destinations">
             <span>{{dest.city}}, {{dest.country}}</span>
             <span ng-if="dest.weather"> - {{dest.weather.main}}, {{dest.weather.temp}}</span>
