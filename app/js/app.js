@@ -1,7 +1,9 @@
 var app = angular.module('utaApp', []);
 
-app.controller('ctrl', function($rootScope, $scope) {
+app.controller('ctrl', function($rootScope, $scope, $http) {
     $scope.title = 'Udemy\'s Unit Testing AngularJS';
+    
+    $scope.apiKey = '74bff1932a0961251a0e5eeac034ed7f';
 
     $scope.destinations = [];
 
@@ -16,4 +18,25 @@ app.controller('ctrl', function($rootScope, $scope) {
             country: $scope.destination.country
         });
     };
+
+    $scope.remove = function(index) {
+        $scope.destinations.splice(index, 1);
+    };
+
+    var convert = function(temp) {
+        return Math.round(temp - 273);
+    };
+
+    $scope.weather = function(destination) {
+        $http.get('http://api.openweathermap.org/data/2.5/weather?q=' + destination.city + '&appid=' + $scope.apiKey)
+            .then(function(resp) {
+                if (resp.data.weather) {
+                    destination.weather = {};
+                    destination.weather.main = resp.data.weather[0].main;
+                    destination.weather.temp = convert(resp.data.main.temp);
+                }
+            }, function(err) {
+                console.err(err);
+            });
+    };    
 });
