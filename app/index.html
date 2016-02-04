@@ -4,7 +4,24 @@
     <title>{{title}}</title>
 </head>
 <body ng-controller="ctrl">
-    <h1>{{title}}</h1>
+    <header>        
+        <h1>{{title}}</h1>
+    </header>
+
+    <section>
+        <form ng-submit="add()">
+            City: <input type="text" name="city" ng-model="destination.city"/>
+            Country: <input type="text" name="country" ng-model="destination.country"/>
+            <input type="submit" value="Add"/>
+        </form>
+    </section>
+
+    <section>
+        <h2>Trips</h2>
+        <div ng-repeat="dest in destinations">
+            <span>{{dest.city}}, {{dest.country}}</span>
+        </div>
+    </section>
 
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
