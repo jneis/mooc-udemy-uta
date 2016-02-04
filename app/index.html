@@ -27,6 +27,13 @@
         </div>
     </section>
 
+    <section>
+        <h2>Warmest</h2>
+        <div ng-repeat="dest in destinations | warmest: 10">
+            <span>{{dest.city}}, {{dest.country}}</span>
+        </div>
+    </section>
+
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
 </body>

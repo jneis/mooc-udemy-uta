@@ -50,3 +50,16 @@ app.controller('ctrl', function($rootScope, $scope, $http, $timeout) {
         }
     });
 });
+
+app.filter('warmest', function() {
+    return function(destinations, minimum) {
+        var filtered = [];
+
+        angular.forEach(destinations, function(destination) {
+            if (destination.weather && destination.weather.temp && (destination.weather.temp >= minimum)) {
+                filtered.push(destination);
+            };
+        });
+        return filtered;
+    };
+});
