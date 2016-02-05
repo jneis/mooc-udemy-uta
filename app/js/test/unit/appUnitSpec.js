@@ -100,10 +100,11 @@ describe('app-test-suite', function() {
 
     // testing directives
     describe('directive-test', function() {
-        var scope, template, httpBackend, isolateScope;
+        var scope, template, httpBackend, isolateScope, rootScope;
 
         beforeEach(inject(function($compile, $rootScope, $httpBackend) {
             scope = $rootScope.$new();
+            rootScope = $rootScope;
             httpBackend = $httpBackend;
             
             scope.dest = {city: 'Tokyo', country: 'Japan'};
@@ -139,6 +140,38 @@ describe('app-test-suite', function() {
 
             expect(scope.destination.weather.main).toBe('Rain');
             expect(scope.destination.weather.temp).toBe(15);
+        });
+
+        it('should add error message for city not found', function() {
+            scope.destination = {
+                city: 'Sydney',
+                country: 'Australia'
+            };
+
+            httpBackend.expectGET('http://api.openweathermap.org/data/2.5/weather?q=' + scope.destination.city + '&appid=' + scope.apiKey)
+                .respond({});
+
+            isolateScope.weather(scope.destination);
+
+            httpBackend.flush();
+
+            expect(rootScope.message).toBe('City not found');
+        });
+
+        it('should add error message for server error', function() {
+            scope.destination = {
+                city: 'Sydney',
+                country: 'Australia'
+            };
+
+            httpBackend.expectGET('http://api.openweathermap.org/data/2.5/weather?q=' + scope.destination.city + '&appid=' + scope.apiKey)
+                .respond(500); // http error code for internal server error
+
+            isolateScope.weather(scope.destination);
+
+            httpBackend.flush();
+
+            expect(rootScope.message).toBe('Server error');
         });
 
         it('should call parent\'s controller remove function', function() {
