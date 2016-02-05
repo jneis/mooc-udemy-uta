@@ -20,10 +20,7 @@
         <h2>Trips</h2>
         <h4 ng-show="message">{{message}}</h4>
         <div ng-repeat="dest in destinations">
-            <span>{{dest.city}}, {{dest.country}}</span>
-            <span ng-if="dest.weather"> - {{dest.weather.main}}, {{dest.weather.temp}}</span>
-            <button ng-click="remove($index)">Remove</button>
-            <button ng-click="weather(dest)">Refresh</button>
+            <div ng-dir-destination dest="dest" api-key="apiKey" on-remove="remove($index)"></div>
         </div>
     </section>
 

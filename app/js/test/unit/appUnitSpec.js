@@ -7,13 +7,14 @@ describe('app-test-suite', function() {
 
     // testing controller
     describe('controller-test', function() {
-        var scope, ctrl, httpBackend, timeout;
+        var scope, ctrl, httpBackend, timeout, rootScope;
 
         beforeEach(
             // angular-mocks' 'inject' injects components to test
-            //    in this case, injected component is a controller
+            //    in this case, injected components are: controller, http service, timeout util
             inject(function($controller, $rootScope, $httpBackend, $timeout) {
                 scope = $rootScope.$new();
+                rootScope = $rootScope;
                 httpBackend = $httpBackend;
                 timeout = $timeout;
                 // (controller name, scope link)
@@ -66,6 +67,55 @@ describe('app-test-suite', function() {
             expect(scope.destinations.length).toBe(0);
         });
 
+        it('should remove error message after timeout', function() {
+            rootScope.message = 'some error message';
+
+            expect(rootScope.message).toBe('some error message');
+
+            rootScope.$apply();
+            timeout.flush();
+
+            expect(rootScope.message).toBe(null);
+        });
+
+    });
+
+    // testing filters
+    describe('filter-test', function() {
+        it('should return only warm destinations', inject(function($filter) {
+            var warmest = $filter('warmest');
+            var destinations = [
+                { city: 'Beijing', country: 'China', weather: {temp: 21}},
+                { city: 'Moscow', country: 'Russia'},
+                { city: 'Lima', country: 'Peru', weather: {temp: 25}}
+            ];
+
+            expect(destinations.length).toBe(3);
+
+            var filtered = warmest(destinations, 22);
+
+            expect(filtered.length).toBe(1);
+        }));
+    });
+
+    // testing directives
+    describe('directive-test', function() {
+        var scope, template, httpBackend, isolateScope;
+
+        beforeEach(inject(function($compile, $rootScope, $httpBackend) {
+            scope = $rootScope.$new();
+            httpBackend = $httpBackend;
+            
+            scope.dest = {city: 'Tokyo', country: 'Japan'};
+            scope.apiKey = 'xyz';
+
+            var element = angular.element('<div ng-dir-destination dest="dest" api-key="apiKey" on-remove="remove()"></div>');
+
+            template = $compile(element)(scope);
+            scope.$digest();
+            isolateScope = element.isolateScope();
+        }));
+
         it('should update weather for destination', function() {
             scope.destination = {
                 city: 'Sydney',
@@ -83,7 +133,7 @@ describe('app-test-suite', function() {
                     }
                 });
 
-            scope.weather(scope.destination);
+            isolateScope.weather(scope.destination);
 
             httpBackend.flush();
 
@@ -91,17 +141,31 @@ describe('app-test-suite', function() {
             expect(scope.destination.weather.temp).toBe(15);
         });
 
-        it('should remove error message after timeout', function() {
-            scope.message = 'some error message';
+        it('should call parent\'s controller remove function', function() {
+            scope.removeCounter = 1;
 
-            expect(scope.message).toBe('some error message');
+            scope.remove = function() {
+                scope.removeCounter++;
+            };
 
-            scope.$apply();
-            timeout.flush();
+            isolateScope.onRemove();
 
-            expect(scope.message).toBe(null);
+            expect(scope.removeCounter).toBe(2);
         });
 
+        it('should generate the correct html', function() {
+            var html = template.html();
+
+            expect(html).toContain('Tokyo, Japan');
+
+            scope.dest.city = 'London';
+            scope.dest.country = 'UK';
+
+            scope.$digest();
+            html = template.html();
+
+            expect(html).toContain('London, UK');
+        });
     });
 
 });
