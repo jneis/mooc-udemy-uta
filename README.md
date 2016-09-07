@@ -1,2 +1,2 @@
-# angular-udemy-uta
-code for udemy's 'unit testing angular.js' course
+# mooc-udemy-uta
+sandbox for udemy's 'unit testing angular.js' course
